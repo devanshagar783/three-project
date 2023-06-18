@@ -4,6 +4,7 @@ import {
     Environment,
     OrbitControls,
     PerspectiveCamera,
+    Stars,
 } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
@@ -91,7 +92,8 @@ const Three = () => {
             />
 
             {/* Environment */}
-            <Environment background={true}>
+            <Stars />
+            {/* <Environment background={true}>
                 <mesh>
                     <sphereGeometry args={[50, 100, 100]} />
                     <meshBasicMaterial
@@ -99,7 +101,7 @@ const Three = () => {
                         color={"#2266cc"}
                     />
                 </mesh>
-            </Environment>
+            </Environment> */}
         </>
     );
 };
