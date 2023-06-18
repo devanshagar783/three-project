@@ -1,54 +1,80 @@
-import React, { useEffect, useRef } from 'react'
-import {angleToRadians} from "../../utils/angle"
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
+import React, { useEffect, useRef } from "react";
+import { angleToRadians } from "../../utils/angle";
+import {
+    Environment,
+    OrbitControls,
+    PerspectiveCamera,
+} from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
 
 const Three = () => {
-
     // console.log(angleToRadians(90))
     // console.log(angleToRadians)
 
-    const orbitRef = useRef(null)
+    const orbitRef = useRef(null);
 
-    useFrame((state)=>{
+    useFrame((state) => {
         // console.log("satte",state)
         // if(!!orbitRef.current){
         //     const {x,y} = state.mouse;
         //     orbitRef.current.setAzimuthalAngle(-x * angleToRadians(45));
         //     orbitRef.current.update()
         // }
-    })
+    });
 
-    useEffect(()=>{
-        console.log("orbiut", orbitRef.current)
-    },[])
+    useEffect(() => {
+        // console.log("orbiut", orbitRef.current)
+    }, []);
 
-  return (
-    <>
+    return (
+        <>
+            <PerspectiveCamera makeDefault position={[0, 1, 5]} />
+            <OrbitControls ref={orbitRef} />
 
-        <PerspectiveCamera makeDefault position={[0, 1, 5]} />
-        <OrbitControls ref={orbitRef}/>
+            {/* Ball */}
+            <mesh position={[0, 0.5, 0]} castShadow>
+                <sphereGeometry args={[0.5, 32, 32]} />
+                <meshStandardMaterial
+                    color={"#ffffff"}
+                    metalness={0.6}
+                    roughness={0.5}
+                />
+            </mesh>
 
-        {/* Ball */}
-        <mesh position={[0, 0.5, 0]} castShadow>
-            <sphereGeometry args={[0.5, 32, 32]} />
-            <meshStandardMaterial color={"#ffffff"} />
-        </mesh>
+            {/* Floor */}
+            <mesh
+                rotation={[-angleToRadians(90), 0, 0]}
+                position={[0, 0, 0]}
+                receiveShadow
+            >
+                <planeGeometry args={[20, 20]} />
+                <meshStandardMaterial color="#1ea3d8" />
+                {/* <meshPhongMaterial side={THREE.BackSide} color="#1ea3d8" /> */}
+            </mesh>
 
-        {/* Floor */}
-        <mesh rotation={[-(angleToRadians(90)), 0, 0]} position={[0,0,0]} receiveShadow>
-            <planeGeometry args={[7,7]} />
-            <meshPhongMaterial color="#1ea3d8" />
-        </mesh>
-    
-        {/* Ambient light */}
-        <ambientLight args={["#ffffff", 0.5]} />
+            {/* Ambient light */}
+            <ambientLight args={["#ffffff", 0.5]} />
 
-        {/* Directional Light */}
-        <spotLight args={["#ffffff", 3, 5, angleToRadians(50), 0.55, 0.5]} position={[-4, 1, 0]} castShadow/>
-    
-    </>
-  )
-}
+            {/* Spot Light */}
+            <spotLight
+                args={["#ffffff", 1.5, 7, angleToRadians(45), 0.55, 0.5]}
+                position={[-3, 1, 0]}
+                castShadow
+            />
 
-export default Three
+            {/* Environment */}
+            <Environment background={true}>
+                <mesh>
+                    <sphereGeometry args={[50, 100, 100]} />
+                    <meshBasicMaterial
+                        side={THREE.BackSide}
+                        color={"#2266cc"}
+                    />
+                </mesh>
+            </Environment>
+        </>
+    );
+};
+
+export default Three;
