@@ -7,7 +7,7 @@ function App() {
 
   return (
     <Canvas className='three-canvas-container' shadows>
-      <Suspense fallback={null}>
+      <Suspense fallback={<></>}>
         <Three />
       </Suspense>
     </Canvas>

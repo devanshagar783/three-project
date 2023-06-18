@@ -7,10 +7,10 @@ import {
 } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { gsap } from "gsap";
+import { Car } from "./car";
 
 const Three = () => {
-    // console.log(angleToRadians(90))
-    // console.log(angleToRadians)
 
     const orbitRef = useRef(null);
 
@@ -23,9 +23,31 @@ const Three = () => {
         // }
     });
 
+    //Animation
+    const ballRef = useRef(null);
     useEffect(() => {
-        // console.log("orbiut", orbitRef.current)
-    }, []);
+        if(!!ballRef.current){
+
+            console.log("ball ref",ballRef.current)
+
+            const timeline = gsap.timeline();
+
+            //x-axis motion
+            let x = 3;
+            timeline.to(ballRef.current.position, {
+                x: 1,
+                duration: 2,
+                ease: "power2.out",
+            }, ) 
+
+            //y-axis motion
+            timeline.to(ballRef.current.position,{
+                y: 0.5,
+                duration: 1.5,
+                ease: "bounce.out"
+            }, "<")
+        }
+    }, [ballRef.current]);
 
     return (
         <>
@@ -33,13 +55,18 @@ const Three = () => {
             <OrbitControls ref={orbitRef} />
 
             {/* Ball */}
-            <mesh position={[0, 0.5, 0]} castShadow>
+            <mesh position={[-2, 2.5, 0]} castShadow ref={ballRef}>
                 <sphereGeometry args={[0.5, 32, 32]} />
                 <meshStandardMaterial
                     color={"#ffffff"}
                     metalness={0.6}
                     roughness={0.5}
                 />
+            </mesh>
+
+            {/* Car */}
+            <mesh>
+                <Car />
             </mesh>
 
             {/* Floor */}
@@ -78,3 +105,7 @@ const Three = () => {
 };
 
 export default Three;
+//npm run dev
+//to convert model from gltf  tp glb
+//gltf-pipeline -i scene.gltf -o model.glb --draco.compressiionLevel 10 -d -b
+//gltfjsx model.glb
